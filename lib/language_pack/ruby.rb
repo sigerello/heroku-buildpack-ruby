@@ -359,7 +359,19 @@ ERROR_MSG
             FileUtils.rm(file)
             FileUtils.rm(sha_file)
           else
-            @fetchers[:mri].fetch_untar("#{ruby_version.version}.tgz")
+
+            puts("!!! ruby_version: #{ruby_version.inspect}")
+
+            if ruby_version.version_without_patchlevel == "ruby-1.9.3"
+              base_url = "https://cache.ruby-lang.org/pub/ruby/1.9"
+              file = "ruby-1.9.3-p551.tar.gz"
+              fetcher = LanguagePack::Fetcher.new(base_url)
+            else
+              file = "#{ruby_version.version}.tgz"
+              fetcher = @fetchers[:mri]
+            end
+
+            fetcher.fetch_untar(file)
           end
         end
       end
